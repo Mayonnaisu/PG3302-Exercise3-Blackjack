@@ -6,11 +6,16 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Player player1 = new Player("Hehe");
+            Console.WriteLine($"Name: {player1.PlayerName}");
 
 
+            Game g = new ();
+            g.generateCards();
 
-
+            foreach (Game.CardValue i in g.Stock) {
+                Console.WriteLine(i.ToString());
+            }
         }
     }
 }
