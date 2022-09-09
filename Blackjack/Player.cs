@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blackjack
 {
-    internal class Card
+    internal class Player
     {
-        //52 cards in a deck.
-        private int _cardNumber;
-
-        //Kanske använda enum istället i Game.
     }
 }
