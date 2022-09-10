@@ -7,7 +7,7 @@ namespace Blackjack
         static void Main(string[] args)
         {
             GameInterface gi = new GameInterface();
-            gi.init();
+            gi.Init();
 
 
 

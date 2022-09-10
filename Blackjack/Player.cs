@@ -27,16 +27,18 @@ namespace Blackjack
 
         public bool ValidateUserName(string UserName)
         {
-            string pattern = "[0-9a-zA-Z ]*";
-
-            if (Regex.Match(UserName, pattern).Success) {
-                Console.WriteLine("Success!");
-                return true;
-            } else {
-                Console.WriteLine("Fail!");
-
+            if ((UserName.Length < 0 && UserName.Length > 20) || UserName == null) {
                 return false;
             }
+
+            string pattern = "[0-9a-zA-Z ]*";
+
+            if (!Regex.Match(UserName, pattern).Success) {
+                Console.WriteLine("Failed!");
+                return false;
+            }
+            Console.WriteLine("Player Class - ");
+            return true;
         }
 
 
@@ -49,11 +51,7 @@ namespace Blackjack
             }
             set
             {
-                if ((value.Length >= 1 && value.Length <= 20) || value != null && ValidateUserName(value)) {
-                    if (ValidateUserName(value)) {
-                        _playerName = value;
-                    }
-                } 
+                _playerName = value;
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Blackjack
+﻿using System;
+
+namespace Blackjack
 {
     /*
      * Interface, interaction with console.
@@ -9,35 +11,41 @@
     {
         private string? _userName;
 
-
-        public void init()
-        {
-            menu();
-            CreatePlayerName();
-        }
-
-        public void menu()
+        public void Init()
         {
             Console.WriteLine("Welcome to Blackjack beepboop");
-
-
+            CreatePlayerName();
         }
 
 
         public void CreatePlayerName()
         {
-            bool ValidName = false;
+            Game game = new Game();
 
-            while (!ValidName) {
-                Console.WriteLine($"Enter your name: (Only letters and numbers. Max 20 characters");
+            Console.WriteLine($"Enter your name: (Only letters and numbers. Max 20 characters");
+            _userName = Console.ReadLine();
+
+            while (!game.CheckUserName(_userName)) {
+                Console.WriteLine("Invalid name! Please try again.");
                 _userName = Console.ReadLine();
-
-                Game game = new Game(_userName);
-                Console.WriteLine($"Welcome {_userName}");
-
-
-
             }
+
+            Console.WriteLine($"GameInterface Class - Welcome {_userName}");
+
+
+
+
+
+
+            /*
+             * Ta emot username
+             * Skicka till Game
+             * 
+             * Game ska validera namnet
+             *  Om OK - fortsätt
+             *  OM NEJ - skriv in nytt namn här
+             * 
+             */
 
         }
 
