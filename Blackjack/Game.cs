@@ -1,9 +1,11 @@
-﻿using static Blackjack.Deck;
+﻿//using static Blackjack.Deck;
 
 namespace Blackjack
 {
     /*
-     * Contain rules for the Blackjack game.
+     * Contains the player and the generated deck.
+     * Check victory condition.
+     * Gets input from GameInterface through console.
      * 
      * 
      */
@@ -11,18 +13,17 @@ namespace Blackjack
     internal class Game
     {
         private Player _player;
-
+        private Deck.CardValue[] _stock = new Deck().generateStock();
+        
+        public Game(string UserName)
+        {
+            _player = new Player(UserName);
+        }
         
 
 
 
-
-
-
-
-
-
-
-
     }
+
+
 }

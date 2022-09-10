@@ -9,14 +9,16 @@
 
     internal class Deck
     {
-        private CardValue[] _deck = new CardValue[52];
+        private CardValue[] _stock = new CardValue[52];
 
         public Deck()
         {
-            _deck = generateCards();
+            _stock = generateStock();
         }
 
 
+        //_stock[i] = Enum.GetValues(typeof(CardValue)).Length;
+        //int CardScore = (int) CardValue.Nine;
         public enum CardValue
         {
             Two = 2,
@@ -30,37 +32,37 @@
             Ten,
             Ace = 11
         };
-        //_stock[i] = Enum.GetValues(typeof(CardValue)).Length;
-        //int CardScore = (int) CardValue.Nine;
 
-        public CardValue[] generateCards()
+
+        //Methods
+        public CardValue[] generateStock()
         {
             int start = 2;
-            int addRest = 40;
-            //Add: Knight, Queen, King = 10
+            int addRest = 40;   //Add: Knight, Queen, King = 10
 
-            for (int i = 0; i < _deck.Length; i++) {
+            for (int i = 0; i < _stock.Length; i++) {
                 if (start >= 12) {
                     start = 2;
                 }
                 if (addRest == i) {
-                    _deck[i] = CardValue.Ten;
+                    _stock[i] = CardValue.Ten;
                     addRest++;
                 }
                 else {
-                    _deck[i] = (CardValue)start++;
+                    _stock[i] = (CardValue)start++;
                 }
             }
-            return _deck;
+            return _stock;
         }
 
+
+        //Properties
         public CardValue[] Stock
         {
             get
             {
-                return _deck;
+                return _stock;
             }
         }
-
     }
 }

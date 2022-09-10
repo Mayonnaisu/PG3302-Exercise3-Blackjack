@@ -4,9 +4,9 @@ namespace Blackjack
 {
     internal class Player
     {
-
-        private int _playerScore = 0;
         private string _playerName = "";
+        private int _playerScore = 0;
+        private Deck.CardValue[] g = new Deck.CardValue[11];
 
         public Player(string Name)
         {
@@ -15,14 +15,28 @@ namespace Blackjack
 
 
         //Methods
-        public void printPlayerName()
+        public void PrintPlayerName()
         {
             Console.WriteLine(PlayerName);
         }
 
-        public void printPlayerScore()
+        public void PrintPlayerScore()
         {
             Console.WriteLine(_playerScore);
+        }
+
+        public bool ValidateUserName(string UserName)
+        {
+            string pattern = "[0-9a-zA-Z ]*";
+
+            if (Regex.Match(UserName, pattern).Success) {
+                Console.WriteLine("Success!");
+                return true;
+            } else {
+                Console.WriteLine("Fail!");
+
+                return false;
+            }
         }
 
 
@@ -35,30 +49,13 @@ namespace Blackjack
             }
             set
             {
-                if ( (value.Length < 1 && value.Length > 50) || value == null) {
-                    _playerName = "blank";
-                } else {
-                    _playerName = value;
-                }
+                if ((value.Length >= 1 && value.Length <= 20) || value != null && ValidateUserName(value)) {
+                    if (ValidateUserName(value)) {
+                        _playerName = value;
+                    }
+                } 
             }
         }
     }
-
-
-
-
-                //}
-            //set
-            //{
-            //    string pattern = @"([0-9][az][A-Z]";
-            //    Regex regex = new Regex(pattern);
-
-            //    if (regex.Matches(value, _playerName)) {
-            //        _playerName = value;
-            //    }
-            //    else {
-            //        _playerName = "empty";
-            //    }
-            //}
 
 }
