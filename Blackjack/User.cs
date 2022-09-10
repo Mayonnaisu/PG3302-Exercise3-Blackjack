@@ -10,25 +10,25 @@ namespace Blackjack
 {
     internal class User
     {
-        private string _playerName = "";
+        private string _userName = "";
         private Deck.CardValue[] _hand = new Deck.CardValue[11];
-        public int PlayerScore { get; set; }
+        private int _userScore = 0;
 
         public User(string Name)
         {
-            PlayerName = Name;
+            UserName = Name;
         }
 
 
         //Methods
-        public void PrintPlayerName()
+        public void PrintUserName()
         {
-            Console.WriteLine(PlayerName);
+            Console.WriteLine(UserName);
         }
 
         public void PrintPlayerScore()
         {
-            Console.WriteLine(PlayerScore);
+            Console.WriteLine(UserScore);
         }
 
         //Bug - when only pressing enter, it passes on 2nd try.
@@ -47,19 +47,33 @@ namespace Blackjack
 
 
         //Properties
-        public string PlayerName
+        //Username
+        public string UserName
         {
             get
             {
-                return _playerName;
+                return _userName;
             }
             set
             {
                 if (ValidateUserName(value)) {
-                    _playerName = value;
+                    _userName = value;
                 }
             }
         }
+        //User score
+        public int UserScore
+        {
+            get
+            {
+                return _userScore;
+            }
+            set
+            {
+                _userScore = value;
+            }
+        }
+        //User hand
         public Deck.CardValue[] Hand
         {
             get
