@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 
 namespace Blackjack
 {
@@ -9,7 +11,9 @@ namespace Blackjack
 
     internal class GameInterface
     {
+        private Game? game;
         private string? _userName;
+
 
         public void Init()
         {
@@ -20,38 +24,36 @@ namespace Blackjack
 
         public void CreatePlayerName()
         {
-            Game game = new Game();
-
             Console.WriteLine($"Enter your name: (Only letters and numbers. Max 20 characters");
             _userName = Console.ReadLine();
 
-            while (!game.CheckUserName(_userName)) {
-                Console.WriteLine("Invalid name! Please try again.");
+            //Check if username is valid. If not -> loop until OK
+            while (_userName == null || !ValidateUserName(_userName)) {
+                Console.WriteLine("Invalid name. Try again: ");
                 _userName = Console.ReadLine();
             }
-
-            Console.WriteLine($"GameInterface Class - Welcome {_userName}");
-
-
-
-
-
-
-            /*
-             * Ta emot username
-             * Skicka till Game
-             * 
-             * Game ska validera namnet
-             *  Om OK - fortsätt
-             *  OM NEJ - skriv in nytt namn här
-             * 
-             */
+            game = new Game(_userName);
+            Console.WriteLine($"Welcome {game.Player}");
 
         }
 
+        public bool ValidateUserName(string UserName)
+        {
+            if ((UserName.Length < 0 && UserName.Length > 20) || UserName == null) {
+                return false;
+            }
+            if (!Regex.IsMatch(UserName, @"^[a-zA-Z0-9]+$")) {
+                return false;
+            }
+            return true;
+        }
 
 
     }
+
+
+
+
 
 
 }

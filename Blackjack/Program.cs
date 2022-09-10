@@ -10,6 +10,8 @@ namespace Blackjack
             gi.Init();
 
 
+            //Player p = new Player("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            //Console.WriteLine(p.PlayerName);
 
 
             //Player player1 = new Player("Tobias");
