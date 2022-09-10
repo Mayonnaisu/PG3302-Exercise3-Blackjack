@@ -21,15 +21,24 @@ namespace Blackjack
             return false;
         }
 
-        public void DealCards()
+        //First time
+        public void InitialDealCards()
         {
             Random random = new Random();
-            int RandomDeckCard = random.Next(2, 12);
+            int RandomDeckCard;
 
-            //First time
-            if (_house.Hand.Length <= 0) {
-                _house.Hand[0] = _stock[RandomDeckCard];
-                _player.Hand[0] = _stock[RandomDeckCard];
+            for (int i = 0; i < _house.Hand.Length; i++) {
+                if (_house.Hand[i] != 0) {
+                    Console.WriteLine("This should be empty!");
+                    return;
+                } else {
+                    for (int j = 0; j < 2; j++) {
+                        RandomDeckCard = random.Next(2, 12);
+                        _house.Hand[j] = _stock[RandomDeckCard];
+                        RandomDeckCard = random.Next(2, 12);
+                        _player.Hand[j] = _stock[RandomDeckCard];
+                    }
+                }
             }
 
 
@@ -37,7 +46,7 @@ namespace Blackjack
 
         }
 
-            public void CheckVictoryCondition()
+        public void CheckVictoryCondition()
         {
 
         }
@@ -72,11 +81,26 @@ namespace Blackjack
         {
             get
             {
-                return _player.PlayerName;
+                return _house.PlayerName;
             }
             set
             {
                 _player.PlayerScore = +1;
+            }
+        }
+
+        public Deck.CardValue[] GetPlayerHand
+        {
+            get
+            {
+                return _player.Hand;
+            }
+        }
+        public Deck.CardValue[] GetHouseHand
+        {
+            get
+            {
+                return _house.Hand;
             }
         }
 

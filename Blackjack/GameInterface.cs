@@ -36,14 +36,18 @@ namespace Blackjack
             
             while (IsPlaying) {
                 //First deal 2 cards - first to House then to Player
-                game.DealCards();
-
-                Console.WriteLine(game.DealCards);
-
-
-
-
+                game.InitialDealCards();
                 Console.WriteLine($"{game.House} Initial Draw is the \"hidden hole card\" and Ten.");
+
+                Console.WriteLine($"Card: {game.GetHouseHand[0]}");
+                Console.WriteLine($"Card: {game.GetHouseHand[1]}");
+                Console.WriteLine($"Card: {game.GetPlayerHand[0]}");
+                Console.WriteLine($"Card: {game.GetPlayerHand[1]}");
+
+
+                IsPlaying = false;
+
+
 
 
             }
