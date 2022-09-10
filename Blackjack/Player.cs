@@ -5,7 +5,7 @@ namespace Blackjack
     internal class Player
     {
 
-        private int _playerRecord = 0;
+        private int _playerScore = 0;
         private string _playerName = "";
 
         public Player(string Name)
@@ -17,12 +17,12 @@ namespace Blackjack
         //Methods
         public void printPlayerName()
         {
-        
+            Console.WriteLine(PlayerName);
         }
 
         public void printPlayerScore()
         {
-
+            Console.WriteLine(_playerScore);
         }
 
 
@@ -41,8 +41,13 @@ namespace Blackjack
                     _playerName = value;
                 }
             }
+        }
+    }
 
-            //}
+
+
+
+                //}
             //set
             //{
             //    string pattern = @"([0-9][az][A-Z]";
@@ -55,9 +60,5 @@ namespace Blackjack
             //        _playerName = "empty";
             //    }
             //}
-        }
-
-
-    }
 
 }
