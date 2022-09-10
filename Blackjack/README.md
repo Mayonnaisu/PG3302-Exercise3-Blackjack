@@ -1,5 +1,10 @@
-﻿om object, generera fram 52 objekter med values. 4 av var.
-om enum -||-
+﻿
+
+
+
+
+
+
 
 ## regler
 # 2 kort per person

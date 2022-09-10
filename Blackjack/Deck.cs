@@ -1,12 +1,11 @@
-﻿namespace Blackjack
+﻿/*
+*   Deck contains:
+*   Information about all cards and its values
+*   Method to generate all cards
+*/
+
+namespace Blackjack
 {
-
-    /*
-    *   Deck contains:
-    *       Information about all cards and its values
-    *       Method to generate all cards
-    */
-
     internal class Deck
     {
         private CardValue[] _stock = new CardValue[52];
@@ -57,12 +56,7 @@
 
 
         //Properties
-        public CardValue[] Stock
-        {
-            get
-            {
-                return _stock;
-            }
-        }
+        public CardValue[] Stock { get; }
+
     }
 }

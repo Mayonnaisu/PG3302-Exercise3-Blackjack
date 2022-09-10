@@ -6,24 +6,21 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
-            GameInterface gi = new GameInterface();
-            gi.Init();
+            Console.WriteLine("Blackjack");
+
+            //GameInterface gi = new GameInterface();
+            //gi.Init();
+
+            User player = new User("Tobias");
+
+            player.Hand[0] = Deck.CardValue.Ten;
+            Console.WriteLine(player.Hand[0]);
 
 
-            //Player p = new Player("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            //Console.WriteLine(p.PlayerName);
+            //Deck.CardValue[] test = new Deck.CardValue[11];
+            //Console.WriteLine(test[0]);
 
 
-            //Player player1 = new Player("Tobias");
-            //player1.PrintPlayerName();
-            //player1.PrintPlayerScore();
-
-            //Deck deck = new ();
-            //deck.generateStock();
-
-            //foreach (Game.CardValue i in g.Stock) {
-            //    Console.WriteLine(i.ToString());
-            //}
         }
     }
 }

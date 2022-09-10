@@ -1,59 +1,61 @@
-﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using System.Text.RegularExpressions;
+﻿/*
+ *  Interface class - Console interaction
+ */
 
 namespace Blackjack
 {
-    /*
-     * Interface, interaction with console.
-     * 
-     */
-
     internal class GameInterface
     {
-        private Game? game;
+        private Game game = new Game();
         private string? _userName;
 
 
+        //Methods
         public void Init()
         {
-            Console.WriteLine("Welcome to Blackjack beepboop");
-            CreatePlayerName();
+            Console.WriteLine($"Enter your name: (Only letters and numbers. Max 20 characters");
+            EnterUserName();
+            GameActive();
         }
 
-
-        public void CreatePlayerName()
+        public void EnterUserName()
         {
-            Console.WriteLine($"Enter your name: (Only letters and numbers. Max 20 characters");
             _userName = Console.ReadLine();
 
-            //Check if username is valid. If not -> loop until OK
-            while (_userName == null || !ValidateUserName(_userName)) {
+            while (!game.NameToValidate(_userName)) {
                 Console.WriteLine("Invalid name. Try again: ");
                 _userName = Console.ReadLine();
             }
-            game = new Game(_userName);
+            game.NameToValidate(_userName);
             Console.WriteLine($"Welcome {game.Player}");
-
         }
 
-        public bool ValidateUserName(string UserName)
+        public void GameActive()
         {
-            if ((UserName.Length < 0 && UserName.Length > 20) || UserName == null) {
-                return false;
+            bool IsPlaying = true;
+            
+            while (IsPlaying) {
+                //First deal 2 cards - first to House then to Player
+                game.DealCards();
+
+                Console.WriteLine(game.DealCards);
+
+
+
+
+                Console.WriteLine($"{game.House} Initial Draw is the \"hidden hole card\" and Ten.");
+
+
             }
-            if (!Regex.IsMatch(UserName, @"^[a-zA-Z0-9]+$")) {
-                return false;
-            }
-            return true;
         }
+
+
+
+
+
+        
+
 
 
     }
-
-
-
-
-
-
 }
