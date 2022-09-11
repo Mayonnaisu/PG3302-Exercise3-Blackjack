@@ -25,7 +25,7 @@ namespace Blackjack
         public void InitialDraw()
         {
             Random random = new Random();
-            int RandomDeckCard;
+            int RandomCard;
 
             for (int i = 0; i < _house.Hand.Length; i++) {
                 if (_house.Hand[i] != 0) {
@@ -34,10 +34,10 @@ namespace Blackjack
                 }
                 else {
                     for (int j = 0; j < 2; j++) {
-                        RandomDeckCard = random.Next(2, 12);
-                        _house.Hand[j] = _stock[RandomDeckCard];
-                        RandomDeckCard = random.Next(2, 12);
-                        _player.Hand[j] = _stock[RandomDeckCard];
+                        RandomCard = random.Next(2, 12);
+                        _house.Hand[j] = _stock[RandomCard];
+                        RandomCard = random.Next(2, 12);
+                        _player.Hand[j] = _stock[RandomCard];
                     }
                 }
             }
