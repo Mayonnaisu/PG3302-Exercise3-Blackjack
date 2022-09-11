@@ -41,10 +41,12 @@ namespace Blackjack
             isPlaying = _game.InitialDraw();
             Console.WriteLine($"{_game.House} Initial Draw is the \"hidden hole card\" and {_game.HouseHand[0]}.");
 
+            
+
             //Print Initial draw + points
             Console.WriteLine(
-                $"Your initial draw is {_game.PlayerHand[0]} and {_game.PlayerHand[1]}." +
-                $"Your current total is {_game.UserScore} \n"
+                $"Your initial draw is {_game.PlayerHand[0]} and {_game.PlayerHand[1]}. " +
+                $"Your current total is {_game.GetPlayer.UserScore} \n"
                 );
 
 
@@ -68,15 +70,16 @@ namespace Blackjack
 
                 }
                 else if (Pick == "s") {
-                    Console.WriteLine(
-                        $"\n" +
-                        $"Dealer's hole card was {_game.HouseHand[1]}. " +
-                        $"Dealer's current total is {_game.CalculatePoints(_game.GetHouse)}"
-                        );
-
                     tempCard = _game.AddCard(_game.GetHouse);
                     _game.CalculatePoints(_game.GetHouse);
                     _game.SpecialAceCondition(_game.GetHouse);
+
+                    Console.WriteLine(
+                        $"\n" +
+                        $"Dealer's hole card was {_game.HouseHand[1]}. " +
+                        $"Dealer's current total is {_game.GetHouse.UserScore}"
+                        );
+
 
                     Console.WriteLine($"Dealer pulled {tempCard} from the deck. " +
                         $"Dealer's current total is {_game.CalculatePoints(_game.GetHouse)} \n"

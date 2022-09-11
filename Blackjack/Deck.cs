@@ -8,6 +8,8 @@
 *   //int CardScore = (int) CardValue.Nine;
 */
 
+using System.Security.Cryptography;
+
 namespace Blackjack
 {
     internal class Deck
@@ -17,6 +19,7 @@ namespace Blackjack
         public Deck()
         {
             _stock = GenerateStock();
+            ShuffleStock();
         }
 
         //Added a None = 0 value in this enum to be able to reset game.
@@ -59,9 +62,33 @@ namespace Blackjack
             return _stock;
         }
 
+        /*
+         * https://www.youtube.com/watch?v=EvPVtKryspY&ab_channel=FallenWorldStudios
+         */
+        public void ShuffleStock()
+        {
+            int lastIndex = _stock.Length - 1;
+            Random random = new Random();
+            
+            while (lastIndex > 0) {
+                CardValue tempValue = _stock[lastIndex];
+
+                int randomIndex = random.Next(0, lastIndex);
+                _stock[lastIndex] = _stock[randomIndex];
+                _stock[randomIndex] = tempValue;
+                lastIndex--;
+            }
+        }
+
+
 
         //Properties
-        public CardValue[] Stock { get; }
+        public CardValue[] Stock {
+            get
+            {
+                return _stock;
+            }
+                }
 
     }
 }

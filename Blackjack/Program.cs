@@ -22,8 +22,19 @@ namespace Blackjack
 
 
 
-            //Deck.CardValue[] test = new Deck.CardValue[11];
-            //Console.WriteLine(test.Length);
+            //Deck d = new Deck();
+            //int count = 0;
+
+            //for (int i = 0; i < d.Stock.Length; i++) {
+            //    //Console.WriteLine(d.Stock[i]);
+            //    if (d.Stock[i] == Deck.CardValue.None) {
+            //        count++;
+            //    }
+            //}
+            //Console.WriteLine(d.Stock.Length);
+            //Console.WriteLine(count);
+
+
 
 
         }

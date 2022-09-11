@@ -21,25 +21,41 @@ namespace Blackjack
             return false;
         }
 
+        //Find random card in deck and that is not None = 0.
+        public Deck.CardValue RandomCard()
+        {
+            Random random = new Random();
+            int randomCard = random.Next(0, 53);
+
+            while (_stock[randomCard] == Deck.CardValue.None) {
+                randomCard = random.Next(0, 53);
+            }
+            return _stock[randomCard];
+        }
+
+
         //First time -> Draw 2 cards, calculate points and check win condition.
         //the variabel isPlaying (bool) from GameInterface calls this method.
         public bool InitialDraw()
         {
-            Random random = new Random();
-            int randomCard;
-
             int playerPoints = CalculatePoints(_player);
             int housePoints = CalculatePoints(_player);
 
             //ADD
             if (playerPoints == housePoints && playerPoints == 0) {
                 for (int j = 0; j < 2; j++) {
-                    randomCard = random.Next(2, 12);
-                    _house.Hand[j] = _stock[randomCard];
-                    RemoveCardFromDeck(_stock[randomCard]);
-                    randomCard = random.Next(2, 12);
-                    _player.Hand[j] = _stock[randomCard];
-                    RemoveCardFromDeck(_stock[randomCard]);
+                    Deck.CardValue tempCard;
+
+                    tempCard = RandomCard();
+                    _player.Hand[j] = tempCard;
+                    RemoveCardFromDeck(tempCard);
+                    //Console.WriteLine("Players: " + tempCard);
+
+
+                    tempCard = RandomCard();
+                    _house.Hand[j] = tempCard;
+                    RemoveCardFromDeck(tempCard);
+                    //Console.WriteLine("House: " + tempCard);
                 }
             }
             else {
@@ -79,7 +95,7 @@ namespace Blackjack
         public Deck.CardValue AddCard(User currentPlayer)
         {
             Random random = new Random();
-            int randomCard = random.Next(2, 12);
+            int randomCard = random.Next(2, 53);
             int checkDeckCount = 0;
 
             //Find how many cards are in the hand.
@@ -88,6 +104,10 @@ namespace Blackjack
                     checkDeckCount++;
                 }
             }
+
+            //
+            //
+
             currentPlayer.Hand[checkDeckCount] = _stock[randomCard];
             RemoveCardFromDeck(_stock[randomCard]);
 
@@ -165,7 +185,7 @@ namespace Blackjack
                         currentPlayer.Hand[i] = Deck.CardValue.AceLow;
                         break;
                     }
-                }           
+                }
             }
         }
 
@@ -184,13 +204,20 @@ namespace Blackjack
 
         //Properties
         //User score
-        public int UserScore
-        {
-            get
-            {
-                return _player.UserScore;
-            }
-        }
+        //public int PlayerScore
+        //{
+        //    get
+        //    {
+        //        return _player.UserScore;
+        //    }
+        //}
+        //public int HouseScore
+        //{
+        //    get
+        //    {
+        //        return _house.UserScore;
+        //    }
+        //}
         //User Object
         public User GetPlayer
         {
