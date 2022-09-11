@@ -35,60 +35,76 @@ namespace Blackjack
 
         public void GameActive()
         {
-            Deck.CardValue TempCard = new();
-            bool IsPlaying = true;
+            bool isPlaying = true;
+
             //First deal 2 cards - first to House then to Player
-            _game.InitialDraw();
+            isPlaying = _game.InitialDraw();
             Console.WriteLine($"{_game.House} Initial Draw is the \"hidden hole card\" and {_game.HouseHand[0]}.");
 
-            //Count initial points for both.
-            _game.CalculateHand(_game.GetPlayer);
-            _game.CalculateHand(_game.GetHouse);
-
+            //Print Initial draw + points
             Console.WriteLine(
                 $"Your initial draw is {_game.PlayerHand[0]} and {_game.PlayerHand[1]}." +
                 $"Your current total is {_game.UserScore}"
                 );
 
-            while (IsPlaying) {
+
+            while (isPlaying) {
+                Deck.CardValue tempCard = new();
+
                 //Deal another card?
                 string Pick = HitOrStay();
-                
-                //Depending on pick
+
                 if (Pick == "h") {
-                    TempCard = _game.AddCard(Pick);
-                    Console.WriteLine($"You pulled {TempCard} from the deck. Your current total is {_game.CalculateHand(_game.GetPlayer)}");
-                    _game.CheckVictoryCondition();
+                    tempCard = _game.AddCard(_game.GetPlayer);
+                    Console.WriteLine(
+                        $"You pulled {tempCard} from the deck. " +
+                        $"Your current total is {_game.CalculatePoints(_game.GetPlayer)}"
+                        );
                 }
                 else if (Pick == "s") {
-                    //Stay? Check what dealer will do.
-                }
+                    //If player select "s":
+                    //Show dealers hidden hole.
+                    //Dealer hit until 17p
+                    Console.WriteLine(
+                        $"Dealer's hole card was {_game.HouseHand[1]}. " +
+                        $"Dealer's current total is {_game.CalculatePoints(_game.GetHouse)}"
+                        );
 
+                    tempCard = _game.AddCard(_game.GetHouse);
+                    Console.WriteLine($"Dealer pulled {tempCard} from the deck. " +
+                        $"Dealer's current total is {_game.CalculatePoints(_game.GetHouse)}"
+                        );
+                    _game.CheckVictoryCondition();
+
+
+
+                }
 
 
             }
-                IsPlaying = false;
+            isPlaying = false;
         }
 
 
         public string HitOrStay()
         {
             Console.Write($"Would you like to hit or stay? (h/s)? ");
-            bool Choice = true;
-            string Input = "";
+            bool choice = true;
+            string input = "";
 
-            while (Choice) {
-                Input = Console.ReadLine();
-                if (Input.ToLower() == "h" || Input.ToLower() == "s") {
-                    Console.WriteLine(Input);
-                    Choice = false;
+            while (choice) {
+                input = Console.ReadLine();
+
+                if (input.ToLower() == "h" || input.ToLower() == "s") {
+                    Console.WriteLine(input);
+                    choice = false;
                 }
                 else {
                     Console.WriteLine("Enter valid option.");
-                    Choice = true;
+                    choice = true;
                 }
             }
-            return Input;
+            return input;
         }
 
 

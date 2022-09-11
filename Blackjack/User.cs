@@ -14,9 +14,9 @@ namespace Blackjack
         private Deck.CardValue[] _hand = new Deck.CardValue[11];
         private int _userScore = 0;
 
-        public User(string Name)
+        public User(string name)
         {
-            UserName = Name;
+            UserName = name;
         }
 
 
@@ -32,12 +32,12 @@ namespace Blackjack
         }
 
         //Bug - when only pressing enter, it passes on 2nd try.
-        public bool ValidateUserName(string UserName)
+        public bool ValidateUserName(string userName)
         {
-            if (UserName.Length <= 0 || UserName.Length > 20 || UserName == null) {
+            if (userName.Length <= 0 || userName.Length > 20 || userName == null) {
                 return false;
             }
-            if (!Regex.IsMatch(UserName, @"^[a-zA-Z0-9]+$")) {
+            if (!Regex.IsMatch(userName, @"^[a-zA-Z0-9]+$")) {
                 return false;
             }
             return true;
