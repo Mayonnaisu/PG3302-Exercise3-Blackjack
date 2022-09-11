@@ -36,7 +36,7 @@ namespace Blackjack
 
         //First time -> Draw 2 cards, calculate points and check win condition.
         //the variabel isPlaying (bool) from GameInterface calls this method.
-        public bool InitialDraw()
+        public void InitialDraw()
         {
             int playerPoints = CalculatePoints(_player);
             int housePoints = CalculatePoints(_player);
@@ -65,17 +65,6 @@ namespace Blackjack
             //CALC
             CalculatePoints(_player);
             CalculatePoints(_house);
-
-            //If initial deal of 2 cards gives 21 = Blackjack
-            if (_player.UserScore == 21) {
-                Console.WriteLine($"{_player.UserName} has blackjack and wins!");
-                return false;
-            }
-            else if (_house.UserScore == 21) {
-                Console.WriteLine($"{_house.UserName} has blackjack and wins!");
-                return false;
-            }
-            return true;
         }
 
         public int CalculatePoints(User currentPlayer)
@@ -135,7 +124,7 @@ namespace Blackjack
                 if (_player.UserScore > 21) {
                     Console.WriteLine(
                         $"Player lost! (Your total was {_player.UserScore}. " +
-                        $"Dealer's total was {_house.UserName}"
+                        $"Dealer's total was {_house.UserScore}"
                         ); ;
 
                     return false;
@@ -154,7 +143,7 @@ namespace Blackjack
                     if (CalculatePoints(_house) > 21) {
                         Console.WriteLine(
                             $"Player Wins! (Your total was {_player.UserScore}. " +
-                            $"Dealer's total was {_house.UserName}"
+                            $"Dealer's total was {_house.UserScore}"
                             );
 
                         return false;

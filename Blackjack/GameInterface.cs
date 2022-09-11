@@ -37,17 +37,8 @@ namespace Blackjack
         {
             bool isPlaying = true;
 
-            //First deal 2 cards - first to House then to Player
-            isPlaying = _game.InitialDraw();
-            Console.WriteLine($"{_game.House} Initial Draw is the \"hidden hole card\" and {_game.HouseHand[0]}.");
-
-            
-
-            //Print Initial draw + points
-            Console.WriteLine(
-                $"Your initial draw is {_game.PlayerHand[0]} and {_game.PlayerHand[1]}. " +
-                $"Your current total is {_game.GetPlayer.UserScore} \n"
-                );
+            //Initial Draw + Check if any player has Ace.
+            isPlaying = FirstRound();
 
 
             while (isPlaying) {
@@ -70,16 +61,16 @@ namespace Blackjack
 
                 }
                 else if (Pick == "s") {
-                    tempCard = _game.AddCard(_game.GetHouse);
-                    _game.CalculatePoints(_game.GetHouse);
-                    _game.SpecialAceCondition(_game.GetHouse);
-
                     Console.WriteLine(
                         $"\n" +
                         $"Dealer's hole card was {_game.HouseHand[1]}. " +
                         $"Dealer's current total is {_game.GetHouse.UserScore}"
                         );
 
+
+                    tempCard = _game.AddCard(_game.GetHouse);
+                    _game.CalculatePoints(_game.GetHouse);
+                    _game.SpecialAceCondition(_game.GetHouse);
 
                     Console.WriteLine($"Dealer pulled {tempCard} from the deck. " +
                         $"Dealer's current total is {_game.CalculatePoints(_game.GetHouse)} \n"
@@ -89,6 +80,30 @@ namespace Blackjack
                 }
             }
             PlayAgain();
+        }
+
+        public bool FirstRound()
+        {
+            //First deal 2 cards - first to House then to Player
+            _game.InitialDraw();
+            Console.WriteLine($"{_game.House} Initial Draw is the \"hidden hole card\" and {_game.HouseHand[0]}.");
+
+
+            if (_game.GetPlayer.UserScore == 21) {
+                Console.WriteLine($"{_game.GetPlayer.UserName} has blackjack and wins!");
+                return false;
+            }
+            else if (_game.GetHouse.UserScore == 21) {
+                Console.WriteLine($"{_game.GetHouse.UserName} has blackjack and wins!");
+                return false;
+            }
+            
+            //Print Initial draw + points
+            Console.WriteLine(
+                $"Your initial draw is {_game.PlayerHand[0]} and {_game.PlayerHand[1]}. " +
+                $"Your current total is {_game.GetPlayer.UserScore} \n"
+                );
+            return true;
         }
 
         public void PlayAgain()
