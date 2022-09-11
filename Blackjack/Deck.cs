@@ -20,9 +20,11 @@ namespace Blackjack
         }
 
         //Added a None = 0 value in this enum to be able to reset game.
+        //AceLow = 1 for the special rule.
         public enum CardValue
         {
             None = 0,
+            AceLow = 1,
             Two = 2,
             Three,
             Four,
@@ -32,7 +34,7 @@ namespace Blackjack
             Eight,
             Nine,
             Ten,
-            Ace = 11
+            AceHigh = 11
         };
 
 

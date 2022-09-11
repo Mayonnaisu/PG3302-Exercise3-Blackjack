@@ -56,9 +56,12 @@ namespace Blackjack
 
                 if (Pick == "h") {
                     tempCard = _game.AddCard(_game.GetPlayer);
+                    _game.CalculatePoints(_game.GetPlayer);
+                    _game.SpecialAceCondition(_game.GetPlayer);
+
                     Console.WriteLine(
                         $"You pulled {tempCard} from the deck. " +
-                        $"Your current total is {_game.CalculatePoints(_game.GetPlayer)} \n"
+                        $"Your current total is {_game.GetPlayer.UserScore} \n"
                         );
 
                     isPlaying = _game.CheckVictoryCondition(Pick);
@@ -72,6 +75,9 @@ namespace Blackjack
                         );
 
                     tempCard = _game.AddCard(_game.GetHouse);
+                    _game.CalculatePoints(_game.GetHouse);
+                    _game.SpecialAceCondition(_game.GetHouse);
+
                     Console.WriteLine($"Dealer pulled {tempCard} from the deck. " +
                         $"Dealer's current total is {_game.CalculatePoints(_game.GetHouse)} \n"
                         );

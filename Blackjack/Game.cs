@@ -110,18 +110,22 @@ namespace Blackjack
 
         public bool CheckVictoryCondition(string pick)
         {
+            //Player card
             if (pick == "h") {
                 if (_player.UserScore > 21) {
                     Console.WriteLine(
                         $"Player lost! (Your total was {_player.UserScore}. " +
                         $"Dealer's total was {_house.UserName}"
-                        );
+                        ); ;
+
                     return false;
                 }
             }
 
+            //House card
             if (pick == "s") {
                 while (true) {
+                    //if points goes beyond 17, dont draw.
                     if (_house.UserScore <= 17) {
                         AddCard(_house);
                         CalculatePoints(_house);
@@ -132,6 +136,7 @@ namespace Blackjack
                             $"Player Wins! (Your total was {_player.UserScore}. " +
                             $"Dealer's total was {_house.UserName}"
                             );
+
                         return false;
                     }
 
@@ -144,8 +149,24 @@ namespace Blackjack
                     }
                 }
             }
-            //Afterwards add special rule for ACE if score > 21
             return true;
+        }
+
+        //This method is run after a new card is added.
+        //This method checks if total points goes over 21 after a hit, if there is an ace, ace = 1.
+        public void SpecialAceCondition(User currentPlayer)
+        {
+            //Get players score. If new card -> over 21 points.
+            if (currentPlayer.UserScore > 21) {
+
+                //Check if player has Ace/Aces (only convert the first it finds)
+                for (int i = 0; i < currentPlayer.Hand.Length; i++) {
+                    if (currentPlayer.Hand[i] == Deck.CardValue.AceHigh) {
+                        currentPlayer.Hand[i] = Deck.CardValue.AceLow;
+                        break;
+                    }
+                }           
+            }
         }
 
         //Reset both hands.
