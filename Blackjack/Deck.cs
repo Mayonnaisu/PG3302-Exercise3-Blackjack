@@ -1,9 +1,10 @@
 ﻿/*
 *   Deck contains:
-*   Information about all cards and its values
-*   Method to generate all cards
+*   Enum with the possible values.
+*   Method to generate all cards and to shuffle them.
 *   
 *   
+*   //Note to self
 *   //_stock[i] = Enum.GetValues(typeof(CardValue)).Length;
 *   //int CardScore = (int) CardValue.Nine;
 */
@@ -22,6 +23,7 @@ namespace Blackjack
             ShuffleStock();
         }
 
+
         //Added a None = 0 value in this enum to be able to reset game.
         //AceLow = 1 for the special rule.
         public enum CardValue
@@ -39,7 +41,6 @@ namespace Blackjack
             Ten,
             AceHigh = 11
         };
-
 
         //Methods
         public CardValue[] GenerateStock()
@@ -69,7 +70,7 @@ namespace Blackjack
         {
             int lastIndex = _stock.Length - 1;
             Random random = new Random();
-            
+
             while (lastIndex > 0) {
                 CardValue tempValue = _stock[lastIndex];
 
@@ -81,14 +82,14 @@ namespace Blackjack
         }
 
 
-
         //Properties
-        public CardValue[] Stock {
+        public CardValue[] Stock
+        {
             get
             {
                 return _stock;
             }
-                }
+        }
 
     }
 }

@@ -21,17 +21,6 @@ namespace Blackjack
 
 
         //Methods
-        public void PrintUserName()
-        {
-            Console.WriteLine(UserName);
-        }
-
-        public void PrintPlayerScore()
-        {
-            Console.WriteLine(UserScore);
-        }
-
-        //Bug - when only pressing enter, it passes on 2nd try.
         public bool ValidateUserName(string userName)
         {
             if (userName.Length <= 0 || userName.Length > 20 || userName == null) {
@@ -44,10 +33,8 @@ namespace Blackjack
         }
 
 
-
-
         //Properties
-        //Username
+        //Username. Setter is not used atm.
         public string UserName
         {
             get
@@ -73,7 +60,7 @@ namespace Blackjack
                 _userScore = value;
             }
         }
-        //User hand
+        //Hand-array
         public Deck.CardValue[] Hand
         {
             get
@@ -85,9 +72,5 @@ namespace Blackjack
                 //Add cards to hand
             }
         }
-
-
-
-
     }
 }

@@ -2,8 +2,6 @@
  *  Interface class - Console interaction
  */
 
-using System.Security.Cryptography.X509Certificates;
-
 namespace Blackjack
 {
     internal class GameInterface
@@ -24,6 +22,7 @@ namespace Blackjack
         {
             _userName = Console.ReadLine();
 
+            //Validate username! Sends the input to Game and then calls the Property in User class to set the name if valid.
             while (!_game.NameToValidate(_userName)) {
                 Console.Write("Invalid name. Try again: ");
                 _userName = Console.ReadLine();
@@ -32,19 +31,14 @@ namespace Blackjack
             Console.WriteLine($"Welcome {_game.Player} \n");
         }
 
-
+        //Actual game running
         public void GameActive()
         {
-            bool isPlaying = true;
-
             //Initial Draw + Check if any player has Ace.
-            isPlaying = FirstRound();
-
+            bool isPlaying = StartRound();
 
             while (isPlaying) {
                 Deck.CardValue tempCard = new();
-
-                //Deal another card?
                 string Pick = HitOrStay();
 
                 if (Pick == "h") {
@@ -58,7 +52,6 @@ namespace Blackjack
                         );
 
                     isPlaying = _game.CheckVictoryCondition(Pick);
-
                 }
                 else if (Pick == "s") {
                     Console.WriteLine(
@@ -66,7 +59,6 @@ namespace Blackjack
                         $"Dealer's hole card was {_game.HouseHand[1]}. " +
                         $"Dealer's current total is {_game.GetHouse.UserScore}"
                         );
-
 
                     tempCard = _game.AddCard(_game.GetHouse);
                     _game.CalculatePoints(_game.GetHouse);
@@ -82,9 +74,8 @@ namespace Blackjack
             PlayAgain();
         }
 
-        public bool FirstRound()
+        public bool StartRound()
         {
-            //First deal 2 cards - first to House then to Player
             _game.InitialDraw();
             Console.WriteLine($"{_game.House} Initial Draw is the \"hidden hole card\" and {_game.HouseHand[0]}.");
 
@@ -97,13 +88,33 @@ namespace Blackjack
                 Console.WriteLine($"{_game.GetHouse.UserName} has blackjack and wins!");
                 return false;
             }
-            
+
             //Print Initial draw + points
             Console.WriteLine(
                 $"Your initial draw is {_game.PlayerHand[0]} and {_game.PlayerHand[1]}. " +
                 $"Your current total is {_game.GetPlayer.UserScore} \n"
                 );
             return true;
+        }
+
+        public string HitOrStay()
+        {
+            Console.Write($"Would you like to hit or stay? (h/s)? ");
+            bool choice = true;
+            string input = "";
+
+            while (choice) {
+                input = Console.ReadLine();
+
+                if (input.ToLower() == "h" || input.ToLower() == "s") {
+                    choice = false;
+                }
+                else {
+                    Console.WriteLine("Enter valid option.");
+                    choice = true;
+                }
+            }
+            return input;
         }
 
         public void PlayAgain()
@@ -130,31 +141,6 @@ namespace Blackjack
                 }
             }
         }
-
-
-        public string HitOrStay()
-        {
-            Console.Write($"Would you like to hit or stay? (h/s)? ");
-            bool choice = true;
-            string input = "";
-
-            while (choice) {
-                input = Console.ReadLine();
-
-                if (input.ToLower() == "h" || input.ToLower() == "s") {
-                    choice = false;
-                }
-                else {
-                    Console.WriteLine("Enter valid option.");
-                    choice = true;
-                }
-            }
-            return input;
-        }
-
-
-
-
 
     }
 }

@@ -14,9 +14,11 @@ namespace Blackjack
 
 
         //Methods
+        //Gets input from GameInterface (console). Sends name to User class.
         public bool NameToValidate(string userName)
         {
             _player = new User(userName);
+
             if (_player.UserName == userName) return true;
             return false;
         }
@@ -25,17 +27,15 @@ namespace Blackjack
         public Deck.CardValue RandomCard()
         {
             Random random = new Random();
-            int randomCard = random.Next(0, 53);
+            int randomCard = random.Next(0, 52);
 
-            while (_stock[randomCard] == Deck.CardValue.None) {
-                randomCard = random.Next(0, 53);
+            while (_stock[randomCard] == Deck.CardValue.None) {             //***************(This should not be needed. check later)****************
+                randomCard = random.Next(0, 52);
             }
             return _stock[randomCard];
         }
 
-
-        //First time -> Draw 2 cards, calculate points and check win condition.
-        //the variabel isPlaying (bool) from GameInterface calls this method.
+        //This method is run at the beginning of each game. Deals initial 2 cards to players and calculate points.
         public void InitialDraw()
         {
             int playerPoints = CalculatePoints(_player);
@@ -49,24 +49,18 @@ namespace Blackjack
                     tempCard = RandomCard();
                     _player.Hand[j] = tempCard;
                     RemoveCardFromDeck(tempCard);
-                    //Console.WriteLine("Players: " + tempCard);
 
 
                     tempCard = RandomCard();
                     _house.Hand[j] = tempCard;
                     RemoveCardFromDeck(tempCard);
-                    //Console.WriteLine("House: " + tempCard);
                 }
             }
-            else {
-                Console.WriteLine("Should be empty!!!");
-            }
-
-            //CALC
             CalculatePoints(_player);
             CalculatePoints(_house);
         }
 
+        //Calculate points for player
         public int CalculatePoints(User currentPlayer)
         {
             int points = 0;
@@ -83,32 +77,24 @@ namespace Blackjack
         //Add a new card to players hand. Returns the card that was added.
         public Deck.CardValue AddCard(User currentPlayer)
         {
-            Random random = new Random();
-            int randomCard = random.Next(2, 53);
+            Deck.CardValue tempCard = RandomCard();
             int checkDeckCount = 0;
 
-            //Find how many cards are in the hand.
+            //Find how many cards are in the hand to know where to add the new one.
             for (int i = 0; i < currentPlayer.Hand.Length; i++) {
                 if ((int)_player.Hand[i] != 0) {
                     checkDeckCount++;
                 }
             }
+            currentPlayer.Hand[checkDeckCount] = tempCard;
+            RemoveCardFromDeck(tempCard);
 
-            //
-            //
-
-            currentPlayer.Hand[checkDeckCount] = _stock[randomCard];
-            RemoveCardFromDeck(_stock[randomCard]);
-
-            return _stock[randomCard];
+            return currentPlayer.Hand[checkDeckCount];
         }
 
-        //Remove Card from Deck when taken
+        //Remove Card from Deck.
         public void RemoveCardFromDeck(Deck.CardValue card)
         {
-            //Få in kortet som lades till.
-            //Ta bort kortet från _deck objekt.
-
             for (int i = 0; i < _stock.Length; i++) {
                 if (_stock[i] == card) {
                     _stock[i] = Deck.CardValue.None;            //Remove card, set it to value None = 0;
@@ -117,6 +103,7 @@ namespace Blackjack
             }
         }
 
+        //Method for regular win/lose condition. Ace-card condition is in a separate method, below.
         public bool CheckVictoryCondition(string pick)
         {
             //Player card
@@ -125,7 +112,7 @@ namespace Blackjack
                     Console.WriteLine(
                         $"Player lost! (Your total was {_player.UserScore}. " +
                         $"Dealer's total was {_house.UserScore}"
-                        ); ;
+                        );
 
                     return false;
                 }
@@ -134,8 +121,7 @@ namespace Blackjack
             //House card
             if (pick == "s") {
                 while (true) {
-                    //if points goes beyond 17, dont draw.
-                    if (_house.UserScore <= 17) {
+                    if (_house.UserScore <= 17) {       //if points goes beyond 17, dont draw.
                         AddCard(_house);
                         CalculatePoints(_house);
                     }
@@ -162,14 +148,12 @@ namespace Blackjack
         }
 
         //This method is run after a new card is added.
-        //This method checks if total points goes over 21 after a hit, if there is an ace, ace = 1.
+        //This method checks if total points goes over 21 after a hit, if there is an ace, sets ace = 1.
         public void SpecialAceCondition(User currentPlayer)
         {
-            //Get players score. If new card -> over 21 points.
-            if (currentPlayer.UserScore > 21) {
+            if (currentPlayer.UserScore > 21) {                                 //Get players score. If new card -> over 21 points.
 
-                //Check if player has Ace/Aces (only convert the first it finds)
-                for (int i = 0; i < currentPlayer.Hand.Length; i++) {
+                for (int i = 0; i < currentPlayer.Hand.Length; i++) {           //Check if player has Ace/Aces (only convert the first it finds)
                     if (currentPlayer.Hand[i] == Deck.CardValue.AceHigh) {
                         currentPlayer.Hand[i] = Deck.CardValue.AceLow;
                         break;
@@ -188,25 +172,8 @@ namespace Blackjack
             }
         }
 
-
-
-
-        //Properties
-        //User score
-        //public int PlayerScore
-        //{
-        //    get
-        //    {
-        //        return _player.UserScore;
-        //    }
-        //}
-        //public int HouseScore
-        //{
-        //    get
-        //    {
-        //        return _house.UserScore;
-        //    }
-        //}
+        
+        //Properties.
         //User Object
         public User GetPlayer
         {

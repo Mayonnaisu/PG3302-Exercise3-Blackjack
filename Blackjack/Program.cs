@@ -8,8 +8,8 @@ namespace Blackjack
         {
             Console.WriteLine("Blackjack");
 
-            GameInterface gi = new GameInterface();
-            gi.Init();
+            GameInterface startGame = new GameInterface();
+            startGame.Init();
 
 
 
@@ -18,8 +18,6 @@ namespace Blackjack
             //player.Hand[0] = Deck.CardValue.Ten;
             //Console.WriteLine(player.Hand[0]);
             //Console.WriteLine(player.PlayerScore);
-
-
 
 
             //Deck d = new Deck();
@@ -33,9 +31,6 @@ namespace Blackjack
             //}
             //Console.WriteLine(d.Stock.Length);
             //Console.WriteLine(count);
-
-
-
 
         }
     }
