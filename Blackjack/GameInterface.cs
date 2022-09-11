@@ -29,7 +29,7 @@ namespace Blackjack
                 _userName = Console.ReadLine();
             }
             _game.NameToValidate(_userName);
-            Console.WriteLine($"Welcome {_game.Player}");
+            Console.WriteLine($"Welcome {_game.Player} \n");
         }
 
 
@@ -44,7 +44,7 @@ namespace Blackjack
             //Print Initial draw + points
             Console.WriteLine(
                 $"Your initial draw is {_game.PlayerHand[0]} and {_game.PlayerHand[1]}." +
-                $"Your current total is {_game.UserScore}"
+                $"Your current total is {_game.UserScore} \n"
                 );
 
 
@@ -58,31 +58,53 @@ namespace Blackjack
                     tempCard = _game.AddCard(_game.GetPlayer);
                     Console.WriteLine(
                         $"You pulled {tempCard} from the deck. " +
-                        $"Your current total is {_game.CalculatePoints(_game.GetPlayer)}"
+                        $"Your current total is {_game.CalculatePoints(_game.GetPlayer)} \n"
                         );
+
+                    isPlaying = _game.CheckVictoryCondition(Pick);
+
                 }
                 else if (Pick == "s") {
-                    //If player select "s":
-                    //Show dealers hidden hole.
-                    //Dealer hit until 17p
                     Console.WriteLine(
+                        $"\n" +
                         $"Dealer's hole card was {_game.HouseHand[1]}. " +
                         $"Dealer's current total is {_game.CalculatePoints(_game.GetHouse)}"
                         );
 
                     tempCard = _game.AddCard(_game.GetHouse);
                     Console.WriteLine($"Dealer pulled {tempCard} from the deck. " +
-                        $"Dealer's current total is {_game.CalculatePoints(_game.GetHouse)}"
+                        $"Dealer's current total is {_game.CalculatePoints(_game.GetHouse)} \n"
                         );
-                    _game.CheckVictoryCondition();
 
-
-
+                    isPlaying = _game.CheckVictoryCondition(Pick);
                 }
-
-
             }
-            isPlaying = false;
+            PlayAgain();
+        }
+
+        public void PlayAgain()
+        {
+            Console.WriteLine("Would you like to play again? (y/n)");
+            bool choice = true;
+            string input = "";
+
+            while (choice) {
+                input = Console.ReadLine();
+
+                if (input.ToLower() == "y") {
+                    _game.ResetGameData();
+                    GameActive();
+                    break;
+                }
+                else if (input.ToLower() == "n") {
+                    choice = false;
+                    break;
+                }
+                else {
+                    Console.WriteLine("Enter valid option.");
+                    choice = true;
+                }
+            }
         }
 
 
@@ -96,7 +118,6 @@ namespace Blackjack
                 input = Console.ReadLine();
 
                 if (input.ToLower() == "h" || input.ToLower() == "s") {
-                    Console.WriteLine(input);
                     choice = false;
                 }
                 else {

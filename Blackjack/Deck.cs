@@ -2,6 +2,10 @@
 *   Deck contains:
 *   Information about all cards and its values
 *   Method to generate all cards
+*   
+*   
+*   //_stock[i] = Enum.GetValues(typeof(CardValue)).Length;
+*   //int CardScore = (int) CardValue.Nine;
 */
 
 namespace Blackjack
@@ -12,14 +16,13 @@ namespace Blackjack
 
         public Deck()
         {
-            _stock = generateStock();
+            _stock = GenerateStock();
         }
 
-
-        //_stock[i] = Enum.GetValues(typeof(CardValue)).Length;
-        //int CardScore = (int) CardValue.Nine;
+        //Added a None = 0 value in this enum to be able to reset game.
         public enum CardValue
         {
+            None = 0,
             Two = 2,
             Three,
             Four,
@@ -34,7 +37,7 @@ namespace Blackjack
 
 
         //Methods
-        public CardValue[] generateStock()
+        public CardValue[] GenerateStock()
         {
             int start = 2;
             int addRest = 40;   //Add: Knight, Queen, King = 10

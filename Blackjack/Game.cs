@@ -4,16 +4,13 @@
  *  Gets input from GameInterface through console.
  */
 
-using System.Runtime.InteropServices;
-using System.Xml.Linq;
-
 namespace Blackjack
 {
     internal class Game
     {
         private User _player;
         private User _house = new User("Dealer");
-        private Deck.CardValue[] _stock = new Deck().generateStock();
+        private Deck.CardValue[] _stock = new Deck().GenerateStock();
 
 
         //Methods
@@ -39,8 +36,10 @@ namespace Blackjack
                 for (int j = 0; j < 2; j++) {
                     randomCard = random.Next(2, 12);
                     _house.Hand[j] = _stock[randomCard];
+                    RemoveCardFromDeck(_stock[randomCard]);
                     randomCard = random.Next(2, 12);
                     _player.Hand[j] = _stock[randomCard];
+                    RemoveCardFromDeck(_stock[randomCard]);
                 }
             }
             else {
@@ -72,7 +71,7 @@ namespace Blackjack
             }
             currentPlayer.UserScore = points;
 
-            Console.WriteLine(currentPlayer.UserScore);
+            //Console.WriteLine(currentPlayer.UserScore);
             return currentPlayer.UserScore;
         }
 
@@ -90,33 +89,73 @@ namespace Blackjack
                 }
             }
             currentPlayer.Hand[checkDeckCount] = _stock[randomCard];
+            RemoveCardFromDeck(_stock[randomCard]);
+
             return _stock[randomCard];
         }
 
-        public void CheckVictoryCondition()
+        //Remove Card from Deck when taken
+        public void RemoveCardFromDeck(Deck.CardValue card)
         {
-            
+            //Få in kortet som lades till.
+            //Ta bort kortet från _deck objekt.
 
+            for (int i = 0; i < _stock.Length; i++) {
+                if (_stock[i] == card) {
+                    _stock[i] = Deck.CardValue.None;            //Remove card, set it to value None = 0;
+                    return;
+                }
+            }
+        }
 
+        public bool CheckVictoryCondition(string pick)
+        {
+            if (pick == "h") {
+                if (_player.UserScore > 21) {
+                    Console.WriteLine(
+                        $"Player lost! (Your total was {_player.UserScore}. " +
+                        $"Dealer's total was {_house.UserName}"
+                        );
+                    return false;
+                }
+            }
 
-            //Depending on pick
-            //If "h" - give new card - calculate points. Check if points are over 21.
-            //Do the same for both players.
-            //If "s" - player stays. Check dealer points, if points are over 21.
+            if (pick == "s") {
+                while (true) {
+                    if (_house.UserScore <= 17) {
+                        AddCard(_house);
+                        CalculatePoints(_house);
+                    }
 
+                    if (CalculatePoints(_house) > 21) {
+                        Console.WriteLine(
+                            $"Player Wins! (Your total was {_player.UserScore}. " +
+                            $"Dealer's total was {_house.UserName}"
+                            );
+                        return false;
+                    }
 
+                    if (_house.UserScore >= _player.UserScore) {
+                        Console.WriteLine(
+                            $"Player lost! (Your total was {_player.UserScore}. " +
+                            $"Dealer's total was {_house.UserScore}"
+                            );
+                        return false;
+                    }
+                }
+            }
+            //Afterwards add special rule for ACE if score > 21
+            return true;
+        }
 
-            //If player has 21 after 2 cards, player has "21"
-
-            //Can continue unless > 21.
-
-            //Dealer must draw until at least 17.
-
-
-
-
-
-
+        //Reset both hands.
+        public void ResetGameData()
+        {
+            _stock = new Deck().GenerateStock();
+            for (int i = 0; i < _player.Hand.Length; i++) {
+                _player.Hand[i] = Deck.CardValue.None;
+                _house.Hand[i] = Deck.CardValue.None;
+            }
         }
 
 
