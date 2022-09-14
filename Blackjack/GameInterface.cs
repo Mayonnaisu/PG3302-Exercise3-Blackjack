@@ -10,6 +10,7 @@ namespace Blackjack
         private string? _userName;
 
 
+
         //Methods
         public void Init()
         {
@@ -17,6 +18,7 @@ namespace Blackjack
             EnterUserName();
             GameActive();
         }
+
 
         public void EnterUserName()
         {
@@ -30,6 +32,7 @@ namespace Blackjack
             _game.NameToValidate(_userName);
             Console.WriteLine($"Welcome {_game.Player} \n");
         }
+
 
         //Actual game running
         public void GameActive()
@@ -74,6 +77,7 @@ namespace Blackjack
             PlayAgain();
         }
 
+
         public bool StartRound()
         {
             _game.InitialDraw();
@@ -97,6 +101,7 @@ namespace Blackjack
             return true;
         }
 
+
         public string HitOrStay()
         {
             Console.Write($"Would you like to hit or stay? (h/s)? ");
@@ -116,6 +121,7 @@ namespace Blackjack
             }
             return input;
         }
+
 
         public void PlayAgain()
         {

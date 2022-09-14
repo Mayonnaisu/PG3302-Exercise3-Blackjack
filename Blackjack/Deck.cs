@@ -24,6 +24,7 @@ namespace Blackjack
         }
 
 
+
         //Added a None = 0 value in this enum to be able to reset game.
         //AceLow = 1 for the special rule.
         public enum CardValue
@@ -39,8 +40,9 @@ namespace Blackjack
             Eight,
             Nine,
             Ten,
-            AceHigh = 11
+            Ace = 11
         };
+
 
         //Methods
         public CardValue[] GenerateStock()
@@ -62,6 +64,7 @@ namespace Blackjack
             }
             return _stock;
         }
+
 
         /*
          * https://www.youtube.com/watch?v=EvPVtKryspY&ab_channel=FallenWorldStudios

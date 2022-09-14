@@ -13,6 +13,7 @@ namespace Blackjack
         private Deck.CardValue[] _stock = new Deck().GenerateStock();
 
 
+
         //Methods
         //Gets input from GameInterface (console). Sends name to User class.
         public bool NameToValidate(string userName)
@@ -22,6 +23,7 @@ namespace Blackjack
             if (_player.UserName == userName) return true;
             return false;
         }
+
 
         //Find random card in deck and that is not None = 0.
         public Deck.CardValue RandomCard()
@@ -34,6 +36,7 @@ namespace Blackjack
             }
             return _stock[randomCard];
         }
+
 
         //This method is run at the beginning of each game. Deals initial 2 cards to players and calculate points.
         public void InitialDraw()
@@ -60,6 +63,7 @@ namespace Blackjack
             CalculatePoints(_house);
         }
 
+
         //Calculate points for player
         public int CalculatePoints(User currentPlayer)
         {
@@ -73,6 +77,7 @@ namespace Blackjack
             //Console.WriteLine(currentPlayer.UserScore);
             return currentPlayer.UserScore;
         }
+
 
         //Add a new card to players hand. Returns the card that was added.
         public Deck.CardValue AddCard(User currentPlayer)
@@ -92,16 +97,6 @@ namespace Blackjack
             return currentPlayer.Hand[checkDeckCount];
         }
 
-        //Remove Card from Deck.
-        public void RemoveCardFromDeck(Deck.CardValue card)
-        {
-            for (int i = 0; i < _stock.Length; i++) {
-                if (_stock[i] == card) {
-                    _stock[i] = Deck.CardValue.None;            //Remove card, set it to value None = 0;
-                    return;
-                }
-            }
-        }
 
         //Method for regular win/lose condition. Ace-card condition is in a separate method, below.
         public bool CheckVictoryCondition(string pick)
@@ -147,6 +142,7 @@ namespace Blackjack
             return true;
         }
 
+
         //This method is run after a new card is added.
         //This method checks if total points goes over 21 after a hit, if there is an ace, sets ace = 1.
         public void SpecialAceCondition(User currentPlayer)
@@ -154,13 +150,26 @@ namespace Blackjack
             if (currentPlayer.UserScore > 21) {                                 //Get players score. If new card -> over 21 points.
 
                 for (int i = 0; i < currentPlayer.Hand.Length; i++) {           //Check if player has Ace/Aces (only convert the first it finds)
-                    if (currentPlayer.Hand[i] == Deck.CardValue.AceHigh) {
+                    if (currentPlayer.Hand[i] == Deck.CardValue.Ace) {
                         currentPlayer.Hand[i] = Deck.CardValue.AceLow;
                         break;
                     }
                 }
             }
         }
+
+
+        //Remove Card from Deck.
+        public void RemoveCardFromDeck(Deck.CardValue card)
+        {
+            for (int i = 0; i < _stock.Length; i++) {
+                if (_stock[i] == card) {
+                    _stock[i] = Deck.CardValue.None;            //Remove card, set it to value None = 0;
+                    return;
+                }
+            }
+        }
+
 
         //Reset both hands.
         public void ResetGameData()
