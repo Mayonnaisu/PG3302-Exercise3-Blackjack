@@ -8,6 +8,7 @@ namespace Blackjack
     {
         private Game _game = new Game();
         private string? _userName;
+        
 
 
 
@@ -37,44 +38,52 @@ namespace Blackjack
         //Actual game running
         public void GameActive()
         {
-            //Initial Draw + Check if any player has Ace.
-            bool isPlaying = StartRound();
+            while(true) {
 
-            while (isPlaying) {
-                Deck.CardValue tempCard = new();
-                string Pick = HitOrStay();
+                //Initial Draw + Check if any player has Ace.
+                bool isPlaying = StartRound();
 
-                if (Pick == "h") {
-                    tempCard = _game.AddCard(_game.GetPlayer);
-                    _game.CalculatePoints(_game.GetPlayer);
-                    _game.SpecialAceCondition(_game.GetPlayer);
+                while (isPlaying) {
+                    Cards tempCard = new();
+                    string Pick = HitOrStay();
 
-                    Console.WriteLine(
-                        $"You pulled {tempCard} from the deck. " +
-                        $"Your current total is {_game.GetPlayer.UserScore} \n"
-                        );
+                    if (Pick == "h") {
+                        tempCard = _game.AddCard(_game.GetPlayer);
+                        _game.GetPoints(_game.GetPlayer);
+                        _game.SpecialAceCondition(_game.GetPlayer);
 
-                    isPlaying = _game.CheckVictoryCondition(Pick);
+                        Console.WriteLine(
+                            $"You pulled {tempCard} from the deck. " +
+                            $"Your current total is {_game.GetPlayer.UserScore} \n"
+                            );
+
+                        isPlaying = _game.CheckVictoryCondition(Pick);
+                    }
+                    //DRAR BARA ETT KORT OAVASETT OM POÄNG E MINDRE ÄN 17.
+                    else if (Pick == "s") {
+                        Console.WriteLine(
+                            $"\n" +
+                            $"Dealer's hole card was {_game.HouseHand[1]}. " +
+                            $"Dealer's current total is {_game.GetHouse.UserScore}"             //LAYERING!! Fixa direkt access.
+                            );
+
+                        tempCard = _game.AddCard(_game.GetHouse);
+                        _game.GetPoints(_game.GetHouse);
+                        _game.SpecialAceCondition(_game.GetHouse);
+
+                        Console.WriteLine($"Dealer pulled {tempCard} from the deck. " +
+                            $"Dealer's current total is {_game.GetPoints(_game.GetHouse)} \n"
+                            );
+
+                        isPlaying = _game.CheckVictoryCondition(Pick);
+                    }
                 }
-                else if (Pick == "s") {
-                    Console.WriteLine(
-                        $"\n" +
-                        $"Dealer's hole card was {_game.HouseHand[1]}. " +
-                        $"Dealer's current total is {_game.GetHouse.UserScore}"
-                        );
-
-                    tempCard = _game.AddCard(_game.GetHouse);
-                    _game.CalculatePoints(_game.GetHouse);
-                    _game.SpecialAceCondition(_game.GetHouse);
-
-                    Console.WriteLine($"Dealer pulled {tempCard} from the deck. " +
-                        $"Dealer's current total is {_game.CalculatePoints(_game.GetHouse)} \n"
-                        );
-
-                    isPlaying = _game.CheckVictoryCondition(Pick);
+                if (!PlayAgain()) {
+                    break;
                 }
             }
-            PlayAgain();
+            
+            
         }
 
 
@@ -85,7 +94,7 @@ namespace Blackjack
 
 
             if (_game.GetPlayer.UserScore == 21) {
-                Console.WriteLine($"{_game.GetPlayer.UserName} has blackjack and wins!");
+                Console.WriteLine($"{_game.GetPlayer.UserName} has blackjack and wins!");           //LAYERING!! Fixa direkt access.
                 return false;
             }
             else if (_game.GetHouse.UserScore == 21) {
@@ -123,27 +132,24 @@ namespace Blackjack
         }
 
 
-        public void PlayAgain()
+        public bool PlayAgain()
         {
             Console.WriteLine("Would you like to play again? (y/n)");
-            bool choice = true;
             string input = "";
 
-            while (choice) {
+            while (true) {
                 input = Console.ReadLine();
 
                 if (input.ToLower() == "y") {
                     _game.ResetGameData();
-                    GameActive();
-                    break;
+                    Console.Clear();
+                    return true;
                 }
                 else if (input.ToLower() == "n") {
-                    choice = false;
-                    break;
+                    return false;
                 }
                 else {
                     Console.WriteLine("Enter valid option.");
-                    choice = true;
                 }
             }
         }

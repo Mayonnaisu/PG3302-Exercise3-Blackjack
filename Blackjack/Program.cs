@@ -6,6 +6,9 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
+            //Console.BackgroundColor = ConsoleColor.Cyan;
+            //Console.Clear();
+           
             Console.WriteLine("Blackjack");
 
             GameInterface startGame = new GameInterface();

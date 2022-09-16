@@ -11,8 +11,8 @@ namespace Blackjack
     internal class User
     {
         private string _userName = "";
-        private Deck.CardValue[] _hand = new Deck.CardValue[11];
-        private int _userScore = 0;
+        public Cards[] Hand { get; } = new Cards[11];    //refactor enum in Deck
+        public int UserScore {get; set;} = 0;
 
         public User(string name)
         {
@@ -33,6 +33,19 @@ namespace Blackjack
             return true;
         }
 
+        public int CalculatePoints(User currentPlayer)
+        {
+            int points = 0;
+
+            for (int i = 0; i < currentPlayer.Hand.Length; i++) {
+                points += (int)currentPlayer.Hand[i];
+            }
+            currentPlayer.UserScore = points;
+
+            //Console.WriteLine(currentPlayer.UserScore);
+            return currentPlayer.UserScore;
+        }
+
 
         //Properties
         //Username. Setter is not used atm.
@@ -49,29 +62,6 @@ namespace Blackjack
                 }
             }
         }
-        //User score
-        public int UserScore
-        {
-            get
-            {
-                return _userScore;
-            }
-            set
-            {
-                _userScore = value;
-            }
-        }
-        //Hand-array
-        public Deck.CardValue[] Hand
-        {
-            get
-            {
-                return _hand;
-            }
-            set
-            {
-                //Add cards to hand
-            }
-        }
+
     }
 }

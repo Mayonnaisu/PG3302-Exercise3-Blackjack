@@ -10,7 +10,7 @@ namespace Blackjack
     {
         private User _player;
         private User _house = new User("Dealer");
-        private Deck.CardValue[] _stock = new Deck().GenerateStock();
+        private Cards[] _stock = new Deck().GenerateDeck();
 
 
 
@@ -26,12 +26,12 @@ namespace Blackjack
 
 
         //Find random card in deck and that is not None = 0.
-        public Deck.CardValue RandomCard()
+        public Cards RandomCard()
         {
             Random random = new Random();
             int randomCard = random.Next(0, 52);
 
-            while (_stock[randomCard] == Deck.CardValue.None) {             //***************(This should not be needed. check later)****************
+            while (_stock[randomCard] == Cards.None) {             //***************(This should not be needed. check later)****************
                 randomCard = random.Next(0, 52);
             }
             return _stock[randomCard];
@@ -41,13 +41,13 @@ namespace Blackjack
         //This method is run at the beginning of each game. Deals initial 2 cards to players and calculate points.
         public void InitialDraw()
         {
-            int playerPoints = CalculatePoints(_player);
-            int housePoints = CalculatePoints(_player);
+            int playerPoints = GetPoints(_player);
+            int housePoints = GetPoints(_player);
 
             //ADD
             if (playerPoints == housePoints && playerPoints == 0) {
                 for (int j = 0; j < 2; j++) {
-                    Deck.CardValue tempCard;
+                    Cards tempCard;
 
                     tempCard = RandomCard();
                     _player.Hand[j] = tempCard;
@@ -59,30 +59,22 @@ namespace Blackjack
                     RemoveCardFromDeck(tempCard);
                 }
             }
-            CalculatePoints(_player);
-            CalculatePoints(_house);
+            GetPoints(_player);
+            GetPoints(_house);
         }
 
 
         //Calculate points for player
-        public int CalculatePoints(User currentPlayer)
+        public int GetPoints(User currentPlayer)
         {
-            int points = 0;
-
-            for (int i = 0; i < currentPlayer.Hand.Length; i++) {
-                points += (int)currentPlayer.Hand[i];
-            }
-            currentPlayer.UserScore = points;
-
-            //Console.WriteLine(currentPlayer.UserScore);
-            return currentPlayer.UserScore;
+            return currentPlayer.CalculatePoints(currentPlayer);
         }
 
 
         //Add a new card to players hand. Returns the card that was added.
-        public Deck.CardValue AddCard(User currentPlayer)
+        public Cards AddCard(User currentPlayer)
         {
-            Deck.CardValue tempCard = RandomCard();
+            Cards tempCard = RandomCard();
             int checkDeckCount = 0;
 
             //Find how many cards are in the hand to know where to add the new one.
@@ -116,12 +108,12 @@ namespace Blackjack
             //House card
             if (pick == "s") {
                 while (true) {
-                    if (_house.UserScore <= 17) {       //if points goes beyond 17, dont draw.
+                    if (_house.UserScore < 17) {       //if points goes beyond 17, dont draw.
                         AddCard(_house);
-                        CalculatePoints(_house);
+                        GetPoints(_house);
                     }
 
-                    if (CalculatePoints(_house) > 21) {
+                    if (GetPoints(_house) > 21) {
                         Console.WriteLine(
                             $"Player Wins! (Your total was {_player.UserScore}. " +
                             $"Dealer's total was {_house.UserScore}"
@@ -150,8 +142,8 @@ namespace Blackjack
             if (currentPlayer.UserScore > 21) {                                 //Get players score. If new card -> over 21 points.
 
                 for (int i = 0; i < currentPlayer.Hand.Length; i++) {           //Check if player has Ace/Aces (only convert the first it finds)
-                    if (currentPlayer.Hand[i] == Deck.CardValue.Ace) {
-                        currentPlayer.Hand[i] = Deck.CardValue.AceLow;
+                    if (currentPlayer.Hand[i] == Cards.Ace) {
+                        currentPlayer.Hand[i] = Cards.AceLow;
                         break;
                     }
                 }
@@ -160,11 +152,11 @@ namespace Blackjack
 
 
         //Remove Card from Deck.
-        public void RemoveCardFromDeck(Deck.CardValue card)
+        public void RemoveCardFromDeck(Cards card)
         {
             for (int i = 0; i < _stock.Length; i++) {
                 if (_stock[i] == card) {
-                    _stock[i] = Deck.CardValue.None;            //Remove card, set it to value None = 0;
+                    _stock[i] = Cards.None;            //Remove card, set it to value None = 0;
                     return;
                 }
             }
@@ -174,10 +166,10 @@ namespace Blackjack
         //Reset both hands.
         public void ResetGameData()
         {
-            _stock = new Deck().GenerateStock();
+            _stock = new Deck().GenerateDeck();
             for (int i = 0; i < _player.Hand.Length; i++) {
-                _player.Hand[i] = Deck.CardValue.None;
-                _house.Hand[i] = Deck.CardValue.None;
+                _player.Hand[i] = Cards.None;
+                _house.Hand[i] = Cards.None;
             }
         }
 
@@ -214,14 +206,14 @@ namespace Blackjack
             }
         }
         //Array of cards
-        public Deck.CardValue[] PlayerHand
+        public Cards[] PlayerHand
         {
             get
             {
                 return _player.Hand;
             }
         }
-        public Deck.CardValue[] HouseHand
+        public Cards[] HouseHand
         {
             get
             {
