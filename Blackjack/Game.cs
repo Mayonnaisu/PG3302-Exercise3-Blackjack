@@ -70,23 +70,50 @@ namespace Blackjack
             return currentPlayer.CalculatePoints(currentPlayer);
         }
 
+        public int GetScore(User currentPlayer)
+        {
+            return currentPlayer.UserScore;
+        }
+
+        public string GetName(User currentPlayer)
+        {
+            return currentPlayer.UserName;
+        }
+
+        public Cards GetFromHand(User currentPlayer, int index)
+        {
+            return currentPlayer.Hand[index];
+        }
+
 
         //Add a new card to players hand. Returns the card that was added.
         public Cards AddCard(User currentPlayer)
         {
             Cards tempCard = RandomCard();
-            int checkDeckCount = 0;
+            int checkDeckIndex = 0;
 
             //Find how many cards are in the hand to know where to add the new one.
             for (int i = 0; i < currentPlayer.Hand.Length; i++) {
                 if ((int)_player.Hand[i] != 0) {
-                    checkDeckCount++;
+                    checkDeckIndex++;
                 }
             }
-            currentPlayer.Hand[checkDeckCount] = tempCard;
+            currentPlayer.Hand[checkDeckIndex] = tempCard;
             RemoveCardFromDeck(tempCard);
 
-            return currentPlayer.Hand[checkDeckCount];
+            return currentPlayer.Hand[checkDeckIndex];
+        }
+
+
+        public string CheckHitOrStay(User currentUser, string userChoice)
+        {
+            Cards tempCard;
+
+            if (userChoice == "h") {
+
+            }
+
+            return "";
         }
 
 
@@ -108,7 +135,7 @@ namespace Blackjack
             //House card
             if (pick == "s") {
                 while (true) {
-                    if (_house.UserScore < 17) {       //if points goes beyond 17, dont draw.
+                    while (_house.UserScore < 17) {       //if points goes beyond 17, dont draw.
                         AddCard(_house);
                         GetPoints(_house);
                     }

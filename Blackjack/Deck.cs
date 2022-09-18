@@ -24,26 +24,6 @@ namespace Blackjack
         }
 
 
-
-        //Added a None = 0 value in this enum to be able to reset game.
-        //AceLow = 1 for the special rule.
-        //public enum CardValue
-        //{
-        //    None = 0,
-        //    AceLow = 1,
-        //    Two = 2,
-        //    Three,
-        //    Four,
-        //    Five,
-        //    Six,
-        //    Seven,
-        //    Eight,
-        //    Nine,
-        //    Ten,
-        //    Ace = 11
-        //};
-
-
         //Methods
         public Cards[] GenerateDeck()
         {
@@ -66,7 +46,7 @@ namespace Blackjack
         }
 
 
-        /*
+        /* Manual sort
          * https://www.youtube.com/watch?v=EvPVtKryspY&ab_channel=FallenWorldStudios
          */
         public void ShuffleStock()

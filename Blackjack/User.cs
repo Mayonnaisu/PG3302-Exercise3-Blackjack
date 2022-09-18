@@ -33,6 +33,7 @@ namespace Blackjack
             return true;
         }
 
+
         public int CalculatePoints(User currentPlayer)
         {
             int points = 0;
