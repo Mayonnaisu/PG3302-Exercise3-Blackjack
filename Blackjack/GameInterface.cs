@@ -35,72 +35,12 @@ namespace Blackjack
         }
 
 
-        //Actual game running
-        public void GameActive()
-        {
-            while(true) {
-
-                //Initial Draw + Check if any player has Ace.
-                bool isPlaying = StartRound();
-
-                while (isPlaying) {
-                    Cards tempCard = new();
-                    string Pick = HitOrStay();
-
-                    if (Pick == "h") {
-                        tempCard = _game.AddCard(_game.GetPlayer);
-                        _game.GetPoints(_game.GetPlayer);
-                        _game.SpecialAceCondition(_game.GetPlayer);
-
-                        Console.WriteLine(
-                            $"You pulled {tempCard} from the deck. " +
-                            $"Your current total is {_game.GetScore(_game.GetPlayer)} \n"
-                            );
-
-                        isPlaying = _game.CheckVictoryCondition(Pick);
-                    }
-                    //DRAR BARA ETT KORT OAVASETT OM POÄNG E MINDRE ÄN 17.
-                    else if (Pick == "s") {
-                        Console.WriteLine(
-                            $"\n" +
-                            $"Dealer's hole card was {_game.GetFromHand(_game.GetHouse, 1)}. " +
-                            $"Dealer's current total is {_game.GetScore(_game.GetHouse)}"
-                            );
-
-                        tempCard = _game.AddCard(_game.GetHouse);
-                        _game.GetPoints(_game.GetHouse);
-                        _game.SpecialAceCondition(_game.GetHouse);
-
-                        Console.WriteLine($"Dealer pulled {tempCard} from the deck. " +
-                            $"Dealer's current total is {_game.GetPoints(_game.GetHouse)} \n"
-                            );
-
-                        isPlaying = _game.CheckVictoryCondition(Pick);
-                    }
-
-
-                }
-                if (!PlayAgain()) {
-                    break;
-                }
-            }
-            
-            
-        }
-
-
         public bool StartRound()
         {
             _game.InitialDraw();
             Console.WriteLine($"{_game.House} Initial Draw is the \"hidden hole card\" and {_game.GetFromHand(_game.GetHouse, 0)}.");
 
-
-            if (_game.GetScore(_game.GetPlayer) == 21) {
-                Console.WriteLine($"{_game.GetName(_game.GetPlayer)} has blackjack and wins!");
-                return false;
-            }
-            else if (_game.GetScore(_game.GetHouse) == 21) {
-                Console.WriteLine($"{_game.GetName(_game.GetHouse)}'s hidden hole card was: {_game.GetFromHand(_game.GetHouse, 1)} has blackjack and wins!");
+            if (_game.CheckBlackjack()) {
                 return false;
             }
 
@@ -113,19 +53,51 @@ namespace Blackjack
         }
 
 
-        public string HitOrStay()
+        //Actual game running
+        public void GameActive()
         {
-            Console.Write($"Would you like to hit or stay? (h/s)? ");
-            string input = "";
+            while(true) {
+                //Initial Draw + Check if any player has Ace.
+                bool isPlaying = StartRound();
 
-            while (true) {
-                input = Console.ReadLine();
+                while (isPlaying) {
+                    string input = "";
+                    bool choice = true;
 
-                if (input.ToLower() == "h" || input.ToLower() == "s") {
-                    return input.ToLower();
+                    while (choice) {
+                        Console.Write($"Would you like to hit or stay? (h/s)? ");
+                        input = Console.ReadLine().ToLower();
+                        Cards tempCard;
+
+                        if (input == "h") {
+                            tempCard = _game.HitOrStay(input, _game.GetPlayer);
+
+                            Console.WriteLine(
+                                $"You pulled {tempCard} from the deck. " +
+                                $"Your current total is {_game.GetScore(_game.GetPlayer)} \n"
+                            );
+                            isPlaying = _game.CheckVictoryCondition();
+                            choice = false;
+                        }
+                        else if (input == "s") {
+                            Console.WriteLine(
+                                $"\n" +
+                                $"Dealer's hole card was {_game.GetFromHand(_game.GetHouse, 1)}. " +
+                                $"Dealer's current total is {_game.GetScore(_game.GetHouse)}"
+                            );
+                            tempCard = _game.HitOrStay(input, _game.GetHouse);
+
+                            isPlaying = _game.CheckVictoryCondition();
+                            choice = false;
+                        }
+                        else {
+                            Console.WriteLine("Enter valid option.");
+                            choice = true;
+                        }
+                    }
                 }
-                else {
-                    Console.WriteLine("Enter valid option.");
+                if (!PlayAgain()) {
+                    break;
                 }
             }
         }

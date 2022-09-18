@@ -4,6 +4,9 @@
  *  Gets input from GameInterface through console.
  */
 
+using System.Runtime.InteropServices;
+using System.Xml.Linq;
+
 namespace Blackjack
 {
     internal class Game
@@ -64,25 +67,19 @@ namespace Blackjack
         }
 
 
-        //Calculate points for player
-        public int GetPoints(User currentPlayer)
+        public bool CheckBlackjack()
         {
-            return currentPlayer.CalculatePoints(currentPlayer);
-        }
-
-        public int GetScore(User currentPlayer)
-        {
-            return currentPlayer.UserScore;
-        }
-
-        public string GetName(User currentPlayer)
-        {
-            return currentPlayer.UserName;
-        }
-
-        public Cards GetFromHand(User currentPlayer, int index)
-        {
-            return currentPlayer.Hand[index];
+            if (_player.Hand.Length == 2 && _house.Hand.Length == 2) {
+                if (_player.UserScore == 21 && _house.UserScore == 21) {
+                    Console.WriteLine($"Its a draw! Both players scored Blackjack");
+                    //
+                    Console.WriteLine($"{_player.UserName}: {_player.Hand[0]} and {_player.Hand[1]}");
+                    Console.WriteLine($"{_house.UserName}'s hidden hole card was: {_house.Hand[1]} ");
+                    //
+                    return true;
+                }
+            }
+            return false;
         }
 
 
@@ -100,63 +97,72 @@ namespace Blackjack
             }
             currentPlayer.Hand[checkDeckIndex] = tempCard;
             RemoveCardFromDeck(tempCard);
+            SpecialAceCondition(currentPlayer);
 
             return currentPlayer.Hand[checkDeckIndex];
         }
 
 
-        public string CheckHitOrStay(User currentUser, string userChoice)
+        public Cards HitOrStay(string userChoice, User currentPlayer)
         {
-            Cards tempCard;
+            Cards tempCard = Cards.None;
 
             if (userChoice == "h") {
+                tempCard = AddCard(currentPlayer);
 
+                GetPoints(currentPlayer);
             }
-
-            return "";
+            else if (userChoice == "s") {       //DRAR BARA ETT KORT OAVASETT OM POÄNG E MINDRE ÄN 17.
+                
+                
+                
+                while (_house.UserScore < 17) {
+                    tempCard = AddCard(_house);
+                    GetPoints(_house);
+                    Console.WriteLine($"Dealer pulled {tempCard} from the deck. " +
+                            $"Dealer's current total is {_house.UserScore} \n"
+                            );
+                }
+            }
+            return tempCard;
         }
 
 
         //Method for regular win/lose condition. Ace-card condition is in a separate method, below.
-        public bool CheckVictoryCondition(string pick)
+        public bool CheckVictoryCondition()
         {
-            //Player card
-            if (pick == "h") {
-                if (_player.UserScore > 21) {
-                    Console.WriteLine(
-                        $"Player lost! (Your total was {_player.UserScore}. " +
-                        $"Dealer's total was {_house.UserScore}"
-                        );
+            if (_player.UserScore > 21) {
+                Console.WriteLine(
+                    $"{_player.UserName} lost! \n" +
+                    $"(Your total was {_player.UserScore}. " +
+                    $"{_house.UserName}'s total was {_house.UserScore}"
+                    );
 
-                    return false;
-                }
+                return false;
             }
 
-            //House card
-            if (pick == "s") {
-                while (true) {
-                    while (_house.UserScore < 17) {       //if points goes beyond 17, dont draw.
-                        AddCard(_house);
-                        GetPoints(_house);
-                    }
+            else if (_house.UserScore > 21) {
+                Console.WriteLine(
+                    $"{_player.UserName} Wins! \n" +
+                    $"(Your total was {_player.UserScore}. " +
+                    $"{_house.UserName}'s total was {_house.UserScore}"
+                    );
 
-                    if (GetPoints(_house) > 21) {
-                        Console.WriteLine(
-                            $"Player Wins! (Your total was {_player.UserScore}. " +
-                            $"Dealer's total was {_house.UserScore}"
-                            );
+                return false;
+            }
 
-                        return false;
-                    }
+            else if (_house.UserScore >= _player.UserScore) {
+                Console.WriteLine(
+                    $"{_player.UserName} lost! \n" +
+                    $"(Your total was {_player.UserScore}. " +
+                    $"{_house.UserName}'s total was {_house.UserScore}"
+                    );
+                return false;
+            }
 
-                    if (_house.UserScore >= _player.UserScore) {
-                        Console.WriteLine(
-                            $"Player lost! (Your total was {_player.UserScore}. " +
-                            $"Dealer's total was {_house.UserScore}"
-                            );
-                        return false;
-                    }
-                }
+            else if (_house.UserScore == _player.UserScore) {
+                Console.WriteLine("Player lost");
+                return false;
             }
             return true;
         }
@@ -200,7 +206,29 @@ namespace Blackjack
             }
         }
 
-        
+
+        //Getters (mostly used by GameInterface)
+        public int GetPoints(User currentPlayer)
+        {
+            return currentPlayer.CalculatePoints(currentPlayer);
+        }
+
+        public int GetScore(User currentPlayer)
+        {
+            return currentPlayer.UserScore;
+        }
+
+        public string GetName(User currentPlayer)
+        {
+            return currentPlayer.UserName;
+        }
+
+        public Cards GetFromHand(User currentPlayer, int index)
+        {
+            return currentPlayer.Hand[index];
+        }
+
+
         //Properties.
         //User Object
         public User GetPlayer
