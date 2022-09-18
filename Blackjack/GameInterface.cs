@@ -8,7 +8,7 @@ namespace Blackjack
     {
         private Game _game = new Game();
         private string? _userName;
-        
+
 
 
 
@@ -56,50 +56,47 @@ namespace Blackjack
         //Actual game running
         public void GameActive()
         {
-            while(true) {
+            while (true) {
                 //Initial Draw + Check if any player has Ace.
                 bool isPlaying = StartRound();
 
                 while (isPlaying) {
-                    string input = "";
-                    bool choice = true;
+                    string input = InputHitOrStay();
 
-                    while (choice) {
-                        Console.Write($"Would you like to hit or stay? (h/s)? ");
-                        input = Console.ReadLine().ToLower();
-                        Cards tempCard;
-
-                        if (input == "h") {
-                            tempCard = _game.HitOrStay(input, _game.GetPlayer);
-
-                            Console.WriteLine(
-                                $"You pulled {tempCard} from the deck. " +
-                                $"Your current total is {_game.GetScore(_game.GetPlayer)} \n"
-                            );
-                            isPlaying = _game.CheckVictoryCondition();
-                            choice = false;
-                        }
-                        else if (input == "s") {
-                            Console.WriteLine(
-                                $"\n" +
-                                $"Dealer's hole card was {_game.GetFromHand(_game.GetHouse, 1)}. " +
-                                $"Dealer's current total is {_game.GetScore(_game.GetHouse)}"
-                            );
-                            tempCard = _game.HitOrStay(input, _game.GetHouse);
-
-                            isPlaying = _game.CheckVictoryCondition();
-                            choice = false;
-                        }
-                        else {
-                            Console.WriteLine("Enter valid option.");
-                            choice = true;
-                        }
+                    if (input == "h") {
+                        _game.HitOrStay("h");
+                        isPlaying = _game.CheckVictoryCondition();
+                    }
+                    else if (input == "s") {
+                        _game.HitOrStay("s");
+                        isPlaying = _game.CheckVictoryCondition();
                     }
                 }
                 if (!PlayAgain()) {
                     break;
                 }
             }
+        }
+
+        public string InputHitOrStay()
+        {
+            Console.Write($"Would you like to hit or stay? (h/s)? ");
+            string input = "";
+            //bool choice = true;
+
+            while (true) {
+                input = Console.ReadLine().ToLower();
+
+                if (input == "h" || input == "s") {
+                    return input;
+                    //choice = false;
+                }
+                else {
+                    Console.WriteLine("Enter valid option.");
+                    //choice = true;
+                }
+            }
+            //return input;
         }
 
 

@@ -28,19 +28,6 @@ namespace Blackjack
         }
 
 
-        //Find random card in deck and that is not None = 0.
-        public Cards RandomCard()
-        {
-            Random random = new Random();
-            int randomCard = random.Next(0, 52);
-
-            while (_stock[randomCard] == Cards.None) {             //***************(This should not be needed. check later)****************
-                randomCard = random.Next(0, 52);
-            }
-            return _stock[randomCard];
-        }
-
-
         //This method is run at the beginning of each game. Deals initial 2 cards to players and calculate points.
         public void InitialDraw()
         {
@@ -83,48 +70,43 @@ namespace Blackjack
         }
 
 
-        //Add a new card to players hand. Returns the card that was added.
-        public Cards AddCard(User currentPlayer)
+        public void HitOrStay(string userChoice)
         {
-            Cards tempCard = RandomCard();
-            int checkDeckIndex = 0;
-
-            //Find how many cards are in the hand to know where to add the new one.
-            for (int i = 0; i < currentPlayer.Hand.Length; i++) {
-                if ((int)_player.Hand[i] != 0) {
-                    checkDeckIndex++;
-                }
-            }
-            currentPlayer.Hand[checkDeckIndex] = tempCard;
-            RemoveCardFromDeck(tempCard);
-            SpecialAceCondition(currentPlayer);
-
-            return currentPlayer.Hand[checkDeckIndex];
-        }
-
-
-        public Cards HitOrStay(string userChoice, User currentPlayer)
-        {
-            Cards tempCard = Cards.None;
+            Cards tempCard;
+            int currentPoints;
 
             if (userChoice == "h") {
-                tempCard = AddCard(currentPlayer);
+                tempCard = AddCard(_player);
+                GetPoints(_player);
+                SpecialAceCondition(_player);
+                currentPoints = GetPoints(_player);
 
-                GetPoints(currentPlayer);
+                Console.WriteLine(
+                    $"You pulled {tempCard} from the deck. " +
+                    $"Your current total is {currentPoints} \n"
+                );
+
+                return;
             }
-            else if (userChoice == "s") {       //DRAR BARA ETT KORT OAVASETT OM POÄNG E MINDRE ÄN 17.
-                
-                
-                
+            else if (userChoice == "s") {
+                Console.WriteLine(
+                    $"\n" +
+                    $"Dealer's hole card was {GetFromHand(_house, 1)}. " +
+                    $"Dealer's current total is {GetPoints(_house)}"
+                );
+
                 while (_house.UserScore < 17) {
                     tempCard = AddCard(_house);
                     GetPoints(_house);
+                    SpecialAceCondition(_house);
+                    currentPoints = GetPoints(_house);
+
                     Console.WriteLine($"Dealer pulled {tempCard} from the deck. " +
-                            $"Dealer's current total is {_house.UserScore} \n"
-                            );
+                        $"Dealer's current total is {currentPoints} \n"
+                    );
                 }
+                return;
             }
-            return tempCard;
         }
 
 
@@ -184,6 +166,39 @@ namespace Blackjack
         }
 
 
+        //Find random card in deck and that is not None = 0.
+        public Cards RandomCard()
+        {
+            Random random = new Random();
+            int randomCard = random.Next(0, 52);
+
+            while (_stock[randomCard] == Cards.None) {             //***************(This should not be needed. check later)****************
+                randomCard = random.Next(0, 52);
+            }
+            return _stock[randomCard];
+        }
+
+
+        //Add a new card to players hand. Returns the card that was added.
+        public Cards AddCard(User currentPlayer)
+        {
+            //Find how many cards are in the hand to know where to add the new one.
+            int checkDeckIndex = 0;
+            for (int i = 0; i < currentPlayer.Hand.Length; i++) {
+                if ((int)currentPlayer.Hand[i] != 0) {
+                    checkDeckIndex++;
+                }
+            }
+
+            Cards randomCard = RandomCard();
+            currentPlayer.Hand[checkDeckIndex] = randomCard;
+            RemoveCardFromDeck(randomCard);
+            //SpecialAceCondition(currentPlayer);
+
+            return currentPlayer.Hand[checkDeckIndex];
+        }
+
+
         //Remove Card from Deck.
         public void RemoveCardFromDeck(Cards card)
         {
@@ -213,10 +228,10 @@ namespace Blackjack
             return currentPlayer.CalculatePoints(currentPlayer);
         }
 
-        public int GetScore(User currentPlayer)
-        {
-            return currentPlayer.UserScore;
-        }
+        //public int GetScore(User currentPlayer)
+        //{
+        //    return currentPlayer.UserScore;
+        //}
 
         public string GetName(User currentPlayer)
         {
